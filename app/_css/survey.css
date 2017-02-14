@@ -1,0 +1,92 @@
+/* 
+    Document   : survey
+    Created on : 2014-7-1, 14:50:40
+    Author     : b-jiang
+    Description:
+        Purpose of the stylesheet follows.
+*/
+body {font-family: "微软雅黑";font-size:14px;margin:0; background-color: #F6F9FD; line-height: 1.3em;z-index: -1}
+.hide{display:none;}
+div#header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 1366px;
+    height: 59px;
+    background-color: #35354F;
+    color: aliceblue;
+    z-index: 10000;
+}
+#title{
+    position: relative;
+    top:30%;
+    left: 2%;
+    font-size:170%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+div#box{
+    margin-top: 60px;
+    width: 1366px;
+    min-height: 510px;
+}
+div.page{
+    width: 100%;
+    background-color: #F6F9FD;
+}
+
+div.question {
+    margin-top: 60px;
+    width: 50%;
+}
+
+fieldset{
+    border: 1px solid  #ddd;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.digitronge {
+    position: relative;
+    left:580px;
+    top:-12px;
+}
+.digitronshi {
+    position: relative;
+    left:550px;
+    top:-12px;
+}
+
+.fen {
+    float:right;
+    left:590px;
+    top:-15px;
+    font-size: 250%;
+    color: #35354F;
+}
+
+
+
+
+
+
+
+
+
+div#sub{
+    margin-top: 30px;
+    padding-left: 600px;
+}

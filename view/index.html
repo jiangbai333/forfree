@@ -1,0 +1,53 @@
+<!--
+    /**
+     * @文件        index.html   
+     * @描述        登陆界面
+     * @功能        根据URL判断是否显示公司信息
+     * @作者        杜旭普
+     * @创建日期    2014-5-23 13:20:59
+     */
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>{$title}1</title> 
+        <script src ='./sys/script/jquery.js'></script>
+        <script src ='./app/_jScript/layer/layer.min.js'></script>
+        <script src ='./sys/script/tool-1.0.1.js'></script>
+        <script src ='./app/_jScript/index.js'></script>
+        <link rel="stylesheet"  href="./app/_css/button.css" type="text/css"/>
+        <link rel="stylesheet"  href="./app/_css/index.css" type="text/css"/>
+    </head>
+    <body style="background-image: url(./app/_image/body.png);">
+        <div id="header">
+            <div id="header_show_position">
+                <div id="logo">
+                    <div id="logo_image" style="background-image: url(./app/_image/{$logo.image});"></div>
+                    <span class="edit">{$logo.text}</span>
+                </div>
+                <div></div>
+            </div>
+        </div>
+        <div id="center">
+            <div id="login">
+                <div id="login_title">
+                    <span class="title"></span>
+                </div>
+                <div id="form_box">
+                    <div id="firm" class="ins_box hide">
+                        <span id="firm_span" class="edit">公司：</span><input id="firm_input_show" type="text" value="请输入公司编码" class="words"/><input id="firm_input_hide" type="text" class="hide"/></div>
+                    <div id="user" class="ins_box">
+                        <span id="user_span" class="edit">账号：</span><input id="user_input_show" type="text" value="请输入账号或电子邮件" class="words"/><input id="user_input_hide" type="text" class="hide"/></div>
+                    <div id="pass" class="ins_box">
+                        <span id="pass_span" class="edit">密码：</span><input id="pass_input_show" type="text" value="请输入密码" class="words"/><input id="pass_input_hide" type="password" value="" class="hide"/>
+                    </div>
+                </div>
+                <div id="button_box">
+                    <button id="signin" class="button rosy" style="width: 190px;margin: 25px; margin-left: 70px;" onclick="login();">登录</button>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+        </div>	
+    </body>
+</html>

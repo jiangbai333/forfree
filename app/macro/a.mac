@@ -1,0 +1,13 @@
+<?php
+define('TITLE_TEXT', 'cx问卷调查'); //网页title
+define('LOGO_TEXT', '问卷调查'); //logo文字
+define('LOGO_IMAGE', 'logo.png'); //logo图标
+
+define('_UCDT_', "0000-00-00 00:00:00"); //mysql中没更改时的datetime
+
+define('_USER_REG_', "/^[a-z0-9A-Z]{4,15}$/"); //匹配用户名
+define('_PASS_REG_', "/^[a-z0-9A-Z]{4,12}$/"); //匹配用户密码
+define('_FIRM_REG_', "/^[a-z0-9A-Z]{4,12}$/"); //匹配公司代码
+define('_MAIL_REG_', "/^[a-z0-9A-Z_]+@[0-9a-zA-Z]+\.[a-z]{2,4}/"); //匹配电子邮件
+define('_CN_REG_', "/^[\x{4E00}-\x{9FA5}]+$/u"); //匹配汉字
+define('_CHAR_REG_', "/^[0-9a-zA-Z_\x{4E00}-\x{9FA5}]+$/u"); //匹配汉字，字母，数字，_
