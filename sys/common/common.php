@@ -1,13 +1,10 @@
 <?php
-if (!defined('FORFREE')) {require_once '../conf/macro.php'; exit(__MSG__);}
 
-/**   
- * @文件        common.php   
- * @作者        b-jiang
- * @描述        服务器脚本
- * @功能        工具函数库
- * @起始日期    2014-2-23  11:51:35    
- * @文件版本    1.2.5
+/**
+ * @文件:       common.php
+ * @作者:       b-jiang
+ * @版本:       1.2.6
+ * @创建时间:   2014-7-9 12:41:54
  */
 
 /**
@@ -27,6 +24,18 @@ function N($modelPrefix) {
  */
 function M($modelPrefix) {
     return is_object(N($modelPrefix)) ? N($modelPrefix)-> db : false; //模型类是否被实例化为对象，若为真则返回该模型的数据库操作句柄db
+}
+
+/**
+ *          从给定的数组中剪切出一个元素 [V1.2.5] 工具函数 [数组] 
+ * @param array $arr 目标数组
+ * @param int|string $key 将要被剪切位置的键名
+ * @return string|int|array|object|bool $arr[$key]
+ */
+function array_cut(&$arr, $key = 0) {
+    $a = $arr[$key]; //取出当前键位的值
+    unset($arr[$key]); //释放当前键位
+    return $a; //返回被剪切的值
 }
 
 /**
@@ -121,6 +130,7 @@ function mark($flag = 0) {
     }
 }
 
+
 /**
  * url重定向
  * @param mixed $url 定向位置
@@ -134,5 +144,10 @@ function redirect($url = './index.php', $time = 0) {
             exit("<meta http-equiv='Refresh' content='" . $time . ";URL=" .$url. "'>");
     }
 }
-//* End of the file common.php  
-//* File path : ./sys/common
+
+function micro() {
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}
+
+//End of file common.php

@@ -1,12 +1,10 @@
 <?php
 
-/**   
- * @文件        macro.php   
- * @作者        b-jiang
- * @描述        服务器脚本
- * @功能        宏
- * @起始日期    2014-2-24  14:39:50    
- * @文件版本    1.2.5
+/**
+ * @文件:       macro.php
+ * @作者:       b-jiang
+ * @版本:       1.2.6
+ * @创建时间:   2014-7-9 10:42:25
  */
 
 /**
@@ -30,25 +28,28 @@ define('__URL_TYPE_ERROR__',
 ); //URL解析模式错误 提示信息
 
 /**
- *          定义系统路径宏
- * 核心文件路径宏 方便程序中对核心文件进行引用
- * 用户可根据需要裁减系统文件 定义系统文件树 但在进行上述操作后 请确定以下宏是否匹配
+ *          系统路径宏
+ * 通过这些预定义宏,可自由访问ForFree内文档结构!
+ * 若你了解php文件以及目录操作，你可以修改或者裁减ForFree文档结构
  */
-define('SYS', substr(dirname(__FILE__), 0, -5)); //sys 驱动类 配置文件 公共函数库 核心组件 系统类库....
+define('SYS', substr(dirname(__FILE__), 0, -5)); //核心目录
 define('SYS_LIB', SYS . '/lib'); //系统类库
 define('SYS_CORE', SYS . '/core'); //核心组件
 define('SYS_COMMON', SYS . '/common'); //系统公共函数库
-define('ROOT_PATH', substr(SYS, 0, -4)); //根目录
+define('ROOT_PATH', substr(SYS, 0, -4)); //ForFree所在根目录
 define('RUN_PATH', ROOT_PATH. '/run'); //运行状态目录
-define('APP', ROOT_PATH . '/app'); //app 开发人员文档目录 
-define('APP_LIB', APP . '/clib'); //开发者自定义类库及第三方类库
-define('APP_C', APP . '/controller'); //C
-define('APP_M', APP . '/model'); //M
+define('CACHE_PATH', RUN_PATH. '/cache'); //缓存目录
+define('APP', ROOT_PATH . '/app'); //开发目录 
+define('APP_LIB', APP . '/clib'); //自定义类库及第三方类库
+define('APP_CON', APP . '/controller'); //控制器容器
+define('APP_MOD', APP . '/model'); //模型容器
+define('APP_RES', APP . '/resources'); //资源容器****
+define('APP_SCR', APP . '/script'); //脚本容器****
 define('VIEW', './view'); //V
 
 /**
- *          定义超全局宏
- * 将超全局数组 $_SERVER 内的基本服务端信息转存 方便程序处理
+ *          超全局宏
+ * 通过超全局宏可方便访问php当前运行状态
  */
 define('SRV_NAME', $_SERVER['SERVER_NAME']); //当前主机名 localhost
 define('SRI_NAME', $_SERVER['SCRIPT_NAME']); //当前脚本的路径 /new/marico/index.php
@@ -58,7 +59,11 @@ define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']); //当前运行脚本所在的文�
 define('SCT_FILENAME', $_SERVER['SCRIPT_FILENAME']); //当前执行脚本的绝对路径 C:/xampp/htdocs/forfree1.2.3/index.php
 define('REQ_URI', $_SERVER['REQUEST_URI']); //访问此页面所需的URI /new/marico/index.php?a=asd
 define('IP', $_SERVER['REMOTE_ADDR']); //正在浏览当前页面用户的IP地址 
+if( isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && strtolower( $_SERVER['HTTP_X_REQUESTED_WITH'] ) == 'xmlhttprequest' ) {
+    define('RER_MET', 'ajax'); //ajax请求
+}
+else {
+    define('RER_MET', 'general'); //普通请求
+}
 
-
-//* End of the file macro.php  
-//* File path : ./sys/conf
+//End of file macro.php

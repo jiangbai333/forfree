@@ -1,0 +1,9 @@
+clib:
+    Custom library 
+    自定义类库，开发者可通过需要扩展自己的应用类
+
+controller:
+    控制器容器
+
+model:
+    模型容器
