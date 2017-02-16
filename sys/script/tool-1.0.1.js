@@ -1,4 +1,55 @@
-(function($) {
+(function($) { 
+    $.fn.clock=function (options) {
+        //默认配置
+        var _this=this;
+        $( this ).empty();
+        var defaults = {
+            size:4, //数码管尺寸
+            showColor:'blue', //点亮字段的颜色
+            heidColor:'#fcfcfc', //熄灭字段的颜色
+            bgColor:'#80bed6', //数码管背景颜色
+            id:$(_this).attr('id')+'_clock', //数码管id
+            duan:0x3f //段码 16进制
+        };
+        // 覆盖默认配置
+        var opts=$.extend(defaults,options); //合并配置
+		//建立数码管 
+        var c=$("<div></div>",{id:opts.id,html:"<div class='clock_div'><div class='duan_div heid duan2'></div><div class='duan_div heid duan3'></div><div class='duan_div heid duan5'></div><div class='duan_div heid duan6'></div><div class='duan_div heid duan1'></div><div class='duan_div heid duan4'></div><div class='duan_div heid duan7'></div><div class='duan_div heid duan8'></div></div>"});
+        $(_this).append(c); //焊接
+        /**
+        *显存处理
+         */
+        var a=Number(opts.duan);
+        var num='';
+        for(;a!=0;){var b=a;num=num+b % 2;a=(a-b % 2)/2;}
+        if(num.length<8){var l=num.length;for (;l<8;l++) {num+='0';}}
+        var display=num.split('');
+        for(var obj in display){if(display[obj] == 1){$(_this).find('.duan'+(obj-(-1))).removeClass('heid').addClass('show');}}
+ 
+        /**
+        *数码管样式处理
+         */
+        /*$('#'+opts.id).css({
+            padding:opts.size / 2+" "+(opts.size*2-(-1))+" "+opts.size / 2+" "+opts.size / 2,
+            width:opts.size*10,
+            height:opts.size*19,
+            backgroundColor:opts.bgColor
+        }).fadeTo('fast', 0.8)*/
+        $(_this).find('.clock_div,.duan_div').css({position:'absolute'});
+        $(_this).find('.show').css({fontSize:'1px',backgroundColor:opts.showColor});
+        $(_this).find('.heid').css({fontSize:'1px',backgroundColor:opts.heidColor});
+        $(_this).find('.duan1').css({height:opts.size+'px',width:opts.size*8+'px',left:opts.size+'px'});
+        $(_this).find('.duan2').css({height:opts.size*8+'px',width:opts.size+'px',top:opts.size+'px',left:opts.size*9+'px'});
+        $(_this).find('.duan3').css({height:opts.size* 8+'px',width:opts.size+'px',top:opts.size*10+'px',left:opts.size*9+'px'});
+        $(_this).find('.duan4').css({height:opts.size+'px',width:opts.size*8+'px',top:opts.size*18+'px',left:opts.size+'px'});
+        $(_this).find('.duan5').css({height:opts.size*8+'px',width:opts.size+'px',top:opts.size*10+'px'});
+        $(_this).find('.duan6').css({height:opts.size*8+'px',width:opts.size+'px',top:opts.size+'px'});
+        $(_this).find('.duan7').css({height:opts.size+'px',width:opts.size*8+'px',top:opts.size*9+'px',left:opts.size+'px'});
+        $(_this).find('.duan8').css({height:opts.size+'px',width:opts.size+'px',top:opts.size*18+'px',left:opts.size*11+'px'});
+    };
+    
+    
+    
     $.fn.drag = function(option) {
         var defaults = {
             
@@ -47,49 +98,6 @@
             alert(options.color);
         });
     };
-    
-    
-    /**
-     *          assign JQ-tool V[1.0] 
-     *          post后跳转 对$.post()的封装
-     * @param {string} purl 服务端脚本路径
-     * @param {string} turl 跳转到的位置
-     * @param {json} data 传输到服务端的数据
-     * @param {type} str 条件
-     * @param {type} back 条件不符合时 返回的信息
-     */
-    $.assign = function(options) {
-        $.assign.defaults = {
-            purl : '',
-            turl : '',
-            data : {},
-            str  : 'success',
-            back : ''
-        };
-        var options = $.extend($.assign.defaults, options);
-        if ( options.purl === '' ) {
-            if ( options.turl === '' ) {
-                alert('请指定一个要跳转到的链接');
-            } else {
-                window.location.assign(options.turl);
-            }
-        } else {
-            if ( options.turl === '' ) {
-                alert('请指定一个要跳转到的链接');
-            } else {
-                $.post(options.purl,options.data,function(d1, t1){
-                    if( d1 === options.str ) {
-                        window.location.assign(options.turl);
-                    } else {
-                        if ( options.back != '' ) {
-                            alert(options.back);
-                        }
-                    }
-                });
-            }
-        }
-    };
-    
 
     $.fn.moveto=function(options){
         //默认配置

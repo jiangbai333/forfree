@@ -4,79 +4,120 @@
  * @文件        indexController.class.php   
  * @作者        b-jiang
  * @描述        类文件
- * @功能        
+ * @功能        (使用您组织的语言替换此处,用以描述该文件基本功能)
  * @起始日期    2014-1-7  17:07:28    
- * @文件版本    cx_survey v0.1
+ * @文件版本    1.2.2   
  */
 class indexController extends controller{
-    /**
-     *          登录页面初始化，渲染
-     * @param string $param 公司代码
-     */
-    public function index($param) {
-        if ( !empty($param) ) { //传没传公司代码
-            $firmId = md5($param['p0']); 
-            $firm = M("index")->table("firm")->where("firmId='{$firmId}'")->select(); //检索公司
-            M("index")->numRows == 1 ? //如果有
-                    ff::$lib['session']->set(array('firmid'=>$param['p0'],'firmkey'=>$firm['id'],'firm'=>$firm['name'])) : ff::$lib['session']->clear(); //存进session
-        } else {
-            ff::$lib['session']->clear();
+    public function index() {
+        $img = imagecreatetruecolor(500, 500);
+        $blue = imagecolorallocate($img, 0, 0, 255);
+        for ($i = 0, $j = 0; $i <= 500; $i++, $j++) {
+            imagesetpixel($img, $i, $j, $blue);
         }
-        $this->title = TITLE_TEXT;
-        $this->logo = array(
-            'text'  =>  LOGO_TEXT,
-            'image' =>  LOGO_IMAGE,
-        );
-        $this->display();
+        imagefill($img,1,0,65535); //区域填充
+        header('Content-type:image/jpeg');
+        imagejpeg($img);
+        imagedestroy($img);
+//        $this->str = 'test';
+//        $this->title = array(
+//            'head'  =>  'forfree1.2.5',
+//            'body'  =>  'ForFree',
+//        );
+////        echo ff::$lib['my']->a;
+////        ff::$lib['my']->work();
+////        mysql_query("CREATE TABLE IF NOT EXISTS `table7` (
+////  `a` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'bbb',
+////  `b` int(11) NOT NULL AUTO_INCREMENT,
+////  PRIMARY KEY (`b`)
+////) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ");
+////        mysql_query('DROP TABLE table1');
+////        $a = mysql_query(" SHOW TABLES FROM " . ff::$conDb['database']);
+////        $c = array();
+////        while($b = mysql_fetch_row($a)){
+////            $c[] = $b;
+////        }
+////            print_r($c);
+////        echo "☑✔✓";
+////        var_dump(explode(" ",M('index')->table('table1')->select()['a']));
+////        echo md5('test3');
+//        $this->display();
+    }
+
+    public function show() {
+        //echo $this->lib['log']->catchLogFile();
+        //redirect('./index.php', 3);
+        //$this->ajaxReturn(mark());
+//        $keys = array();
+//        for($i = 0; $i < 100; $i++) {
+//            $keys[$i] = mark(2);
+//        }
+//        print_r($keys);
+//        M('index')->table('test')->data(array('key'=>$keys))->add();
+//        $data = M('index')->table('info')->field('email')->where("userid=1028 or userid=1029 or userid=1030 or userid=1027")->select();
+//        foreach ($data as $key => $value) {
+//            echo $value['email'].'<br>';
+//            ff::$lib['mail']->smtp($value['email'], '565197391@qq.com', '测试邮件', '这是一封测试邮件');
+//        }
+        
     }
     
-    /**
-     *          APIs 检查公司 
-     * 若进入网站时指定了公司id,则返回一个json数组[{firm: "测试公司1",firmid: "test1"}]
-     * 否则返回错误代码: 1000 session中不存在公司
-     */
-    public function checkFirm() { 
-        if( (bool)ff::$lib['session']->get('firmid') ) { //公司是否存在session中
-            $data = array(
-                'firm' => ff::$lib['session']->get('firm'),
-                'firmid' => ff::$lib['session']->get('firmid'),                
-            );
-            $this->ajaxReturn($data); //存在返回数据
-        } else {
-            $this->ajaxReturn(1000); //不存在返回１０００
-        }
+    public function send() {
+//        $data = M('index')->table('info')->field('email')->where("userid=1028 or userid=1029 or userid=1030 or userid=1027")->select();
+        $data = M('index')->table('test')->where('id=1')->select();
+        $a = $data['key'];
+//        foreach ($data as $key => $value) {
+//            echo $value['email'].'<br>';
+//            ff::$lib['mail']->smtp($value['email'], '565197391@qq.com', '测试邮件', '这是一封测试邮件');
+//        }
+        for($i=0;$i<10;$i++)
+        ff::$lib['mail']->smtp('565197391@qq.com', '1129087617@qq.com', '测试邮件', "http://localhost/forfree1.2.5/index.php?a=test&p0={$a}");
     }
     
-    /**
-     *          用户登录判断
-     * 需要前端传入userid, password, firmid. firmid不是不要参数,当用户从公司页面访问时,可以不传firmid
-     * 返回操作码：
-     * 1001：检索公司发生错误
-     * 1002：用户或密码错误，或用户不存在
-     * 1000：正确
-     */
-    public function login() {
-        $userid = $_POST['userid'];
-        $password = md5($_POST['password']);
-        if ( isset($_POST['firmid']) ) {
-            $firmid = md5($_POST['firmid']);
-            $firm = M("index")->table("firm")->where("firmId='{$firmid}'")->select(); //检索公司
-            if ( M("index")->numRows == 1 ) {
-                ff::$lib['session']->set(array('firmid'=>$_POST['firmid'],'firmkey'=>$firm['id'],'firm'=>$firm['name']));
-            } else {
-                $this->ajaxReturn(1001); 
-            }
+    public function test() {
+//        $sql = "SELECT uname FROM user where uid=2";
+//        $a = M('index')->query($sql);
+//        echo $this->micro()-M('index')->queryStartTime."<br>";
+//        $sql = "SELECT user.uname, art.title FROM user JOIN art ON user.uid = art.uid WHERE user.uid>1 AND art.tid=2";
+//        $a = M('index')->query($sql);
+//        echo $this->micro()-M('index')->queryStartTime."<br>";
+//        if(!array_foo($a)){
+//        echo '<table>';
+//        foreach ($a as $key => $value) {
+//            echo "<tr>";
+//            echo "<td>{$value['uname']}</td><td>{$value['title']}</td>";
+//            echo "<tr>";
+//            
+//        }
+//        
+//        echo "</table>";
+//        }else {print_r($a);}
+        
+        $a = M('index')->table('art')->order('CONVERT(title USING gbk)')->select();
+        foreach ($a as $key => $value) {
+            echo "<br>";
+            print_r($value);
+            echo "<br>";
         }
-        $firmid = md5(ff::$lib['session']->get('firmid'));
-        $user = M('index')->table('user')->where("userid='{$userid}' AND firmid='{$firmid}' AND password='{$password}'")->select();
-        if ( M('index')->numRows != 1) {
-            $this->ajaxReturn(1002);
-        } else {
-            ff::$lib['session']->set(array('userid'=>$user['userid'],'name'=>$user['name'],'password'=>$password,'email'=>$user['email'],'lv'=>$user['lv']));
-            $dateTime = ff::$lib['date']->showDateTime();
-            $ip = IP;
-            M('index')->table('loginfo')->data(array('lastip'=>$ip,'lasttime'=>$dateTime))->where("userid='{$userid}' AND firmid='{$firmid}'")->update();
-            $this->ajaxReturn(1000);
-        }
+        /**
+         * 打开csv
+         */
+//        $file =fopen($_FILES["file"]['name'],"r"); 
+////        $file = fopen("a.csv","r");
+//        while (!feof($file)){
+//        print_r(fgetcsv($file));
+//        echo "<br>";
+//        
+//        }
+//        echo "Upload: " . $_FILES["file"]["name"] . "<br />";
+//		echo "Type: " . $_FILES["file"]["type"] . "<br />";
+//		echo "Size: " . ($_FILES["file"]["size"] / 1024) . " Kb<br />";
+//		echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br />";
+//        print_r($file);
+//        fclose($file);
+        
+//        var_dump($_FILES);
     }
 }
+
+?>

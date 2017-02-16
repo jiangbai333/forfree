@@ -1,13 +1,10 @@
 <?php
-if (!defined('FORFREE')) {require_once '../conf/macro.php'; exit(__MSG__);}
 
 /**
- * @文件        router.class.php   
- * @作者        b-jiang
- * @描述        类文件
- * @功能        路由
- * @起始日期    2014-2-23  15:08:19    
- * @文件版本    1.2.5   
+ * @文件:       router.class.php
+ * @作者:       b-jiang
+ * @版本:       1.2.6
+ * @创建时间:   2014-7-9 15:13:18
  */
 final class Router {
     private $_config = array(); //完整配置数组
@@ -31,19 +28,20 @@ final class Router {
     private $_urlQuery = NULL; //url变量表
 
     /**
-     *          构造方法 [V1.2.0] class Router[构造方法]
-     * 路由类入口
+     *          构造方法 [ForFree v1.2.6] class router [public]
+     * @功能    路由器构造方法，执行路由器初始化方法
      */
     public function __construct() {
         $this->init(ff::$conRouter);
     }
     
     /**
-     *          路由器初始化 [v1.2.5] class Router[私有方法]
+     *          路由器初始化方法  [ForFree v1.2.6] class router [private]
+     * @功能    分离配置参数，获取URL变量
      * @param array $config 路由器配置
      */
     private function init($config) {
-        $this->_config = $config; //获取配置数组
+        $this->_config = $config; //路由器配置
         $this->_controller = $config['c']; //分离默认控制器
         $this->_action = $config['a']; //分离默认动作
         $this->_group = $config['g']; //分离默认分组
@@ -53,7 +51,7 @@ final class Router {
             parse_str(QUY_STRING, $this->_urlQuery); //将URL符号表解析到URL变量表 self->_urlQuery
         } else if ($this->_type == 2) { //pathinfo方式
             //将URL pathinfo 解析到URL变量表 self->_urlQuery
-            $this->_urlQuery = array_diff_key(explode($this->_pathInfoDepr, REQ_URI), explode($this->_pathInfoDepr, SRI_NAME));
+            $this->_urlQuery = explode($this->_pathInfoDepr, str_ireplace(SRI_NAME. $this->_pathInfoDepr, "", REQ_URI));
         } else if ($this->_type == 3) { //混合方式
             
         } else {
@@ -63,7 +61,8 @@ final class Router {
     }
     
     /**
-     *          分配URL解析方法 [V1.2.5] class Router[公共方法]
+     *          分配URL解析方法  [ForFree v1.2.6] class router [public]
+     * @功能    通过配置文件中选择的URL解析模式，散转到相应的处理方法
      * @return array 解析后的URL变量表
      */
     public function getUrlParam() {
@@ -71,77 +70,64 @@ final class Router {
     }
     
     /**
-     *          query方式 [V1.1.0] class Router[私有方法]
+     *          query方式 [ForFree v1.2.6] class router [private]
      * @param array $query URL符号表
      * @return array 解析后的URL变量表
      */
     private function queryType($query) {
-        $queryArray = array();
-        if(isset($query['g'])) { //group是否存在
-            $queryArray['group'] = $query['g'];
+        $q = array();
+        if ( isset($query['g']) ) { //获得分组
+            $q['group'] = $query['g'];
             unset($query['g']);
-        } else $queryArray['group'] = $this->_group; //将group指定为默认group
-        
-        if(isset($query['a'])) { //action是否存在
-            $queryArray['action'] = $query['a'];
+        } else { $q['group'] = $this->_group; }
+        if ( isset($query['a']) ) { //获得分组
+            $q['action'] = $query['a'];
             unset($query['a']);
-        } else $queryArray['action'] = $this->_action; //将action指定为默认action
-        
-        if(isset($query['c'])) {
-            $queryArray['controller'] = $query['c'];
+        } else { $q['action'] = $this->_action; }        
+        if ( isset($query['c']) ) { //获得分组
+            $q['controller'] = $query['c'];
             unset($query['c']);
-        } else $queryArray['controller'] = $this->_controller; //将controller指定为默认controller
+        } else { $q['controller'] = $this->_controller; }
         if(sizeof($query) > 0) { //是否存在其他参数
-            $queryArray['param'] = $query;
-        } else $queryArray['param'] = '';
-        return $queryArray;
+            $q['param'] = $query;
+        } else $q['param'] = '';
+        return $q;
     }
     
     /**
-     *          pathinfo方式 [V1.2.5] class Router[私有方法]
+     *          pathinfo方式 [ForFree v1.2.6] class router [private]
      * @param array $info URL符号表
      * @return array 解析后的URL变量表
      */
     private function pathInfoType($info) {
-        $queryA = array();
-        $queryB = array();
-        $queryArray = array();
-        $pramaName = array(0=>'c', 1=>'a', 2=>'g');
-        $end = true;
-        do {
-            str_get_letter(current($info)) === 'p' && is_numeric(str_get_letter(current($info), 1)) ? 
-                    $queryA[current($info)] = next($info) : 
-                    $queryA[] = current($info);
-        } while ($end = next($info));
-        foreach ($queryA as $key => $value) {
-            if (is_numeric($key) && $key < 3) {
-                $queryB[$pramaName[$key]] = $value;
-            } else if (is_numeric($key) && $key >= 3) {
-                echo "<script>alert('URL内存在未定义符号$value');</script>";
+        $q = array();
+        $paramName = array(0=>'controller', 1=>'action', 2=>'group');
+        $num = 0;
+        foreach ($info as $key => $value) {
+            if ( preg_match('~.*&.*~', $value) ) { //分离参数项
+                $param = $value;
+                unset($info[$key]);
             } else {
-                $queryB[$key] = $value;
+                if ( $num < 3 ) { //分离控制器 模型 分组等组件
+                    $q[$paramName[$num++]] = $value;
+                    unset($info[$key]);
+                }
             }
         }
-        if(isset($queryB['g']) && $queryB['g'] != '') { //group是否存在
-            $queryArray['group'] = $queryB['g'];
-            unset($queryB['g']);
-        } else $queryArray['group'] = $this->_group; //将group指定为默认group
-        
-        if(isset($queryB['a']) && $queryB['a'] != '') { //action是否存在
-            $queryArray['action'] = $queryB['a'];
-            unset($queryB['a']);
-        } else $queryArray['action'] = $this->_action; //将action指定为默认action
-        
-        if(isset($queryB['c']) && $queryB['c'] != '') {
-            $queryArray['controller'] = $queryB['c'];
-            unset($queryB['c']);
-        } else $queryArray['controller'] = $this->_controller; //将controller指定为默认controller
-        if(sizeof($queryB) > 0) { //是否存在其他参数
-            $queryArray['param'] = $queryB;
-        } else $queryArray['param'] = '';
-        return $queryArray;
-    }
+        $q['controller'] = isset( $q['controller'] ) ? $q['controller'] : $this->_controller;
+        $q['action'] = isset( $q['action'] ) ? $q['action'] : $this->_action;
+        $q['group'] = isset( $q['group'] ) ? $q['group'] : $this->_group;
+        if ( isset($param) ) {
+            parse_str($param, $q['param']); //合并参数
+        } else {
+            $q['param'] = '';
+        }
+//         [预留]：URL容错处理
+//        if ( sizeof( $info ) > 0 ) { 
+//            提示URL有多余参数，是否输入错误
+//        }
+        return $q;
+    }    
 }
 
-//* End of the file router.class.php 
-//* File path : ./sys/lib/
+//End of file router.class.php
